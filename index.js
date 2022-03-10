@@ -1,34 +1,35 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const app = express()
-require('dotenv').config()
-
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+require("dotenv").config();
 
 app.use(
-    express.urlencoded({
-        extended: true
-    })
-)
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-app.use(express.json())
+app.use(express.json());
 
-const universitiesRoutes = require('./routes/universitiesRoutes')
+const universitiesRoutes = require("./routes/universitiesRoutes");
 
-app.use('/universities', universitiesRoutes)
+app.use("/universities", universitiesRoutes);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Pagina Inicial" });
+});
 
-app.get('/', (req, res) => {
-    res.json({message: "Oi Express!"})
-})
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
 
-const DB_USER = process.env.DB_USER
-const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD)
-
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.hqxdk.mongodb.net/universitiesData?retryWrites=true&w=majority`)
-.then(() => {
-    console.log('Conectamos ao Mongodb porta 3000')
-    app.listen(3000)
-})
-.catch((err) => console.log(err))
-
-
+mongoose
+  .connect(
+    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.hqxdk.mongodb.net/universitiesData?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    console.log(
+      "Servidor rodando na porta 3000 e host: http://localhost:3000/"
+    );
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));
